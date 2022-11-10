@@ -51,5 +51,6 @@ export default function Search({ valorDoFiltro, setValorDoFiltro }) {
                 🔎
             </button>
         </StyledSearch>
+        
     )
 }

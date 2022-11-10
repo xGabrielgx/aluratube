@@ -1,14 +1,13 @@
 import React from "react";
 import config from "../config.json";
 import styled from "styled-components";
-import { CSSReset } from "../src/components/CSSReset";
+
 import Menu from "../src/components/Menu";
 import { StyledTimeline } from "../src/components/Timeline";
 
 
 
-function HomePage() {
-    // um componente chamando outros componentes
+function HomePage() {  
     // console.log(config.playlists);
 
     const estilosDaHomePage = {
@@ -19,13 +18,14 @@ function HomePage() {
 
     return (
         <>
-            <CSSReset />
+            
             <div style={{
                 display: "flex",
                 flexDirection: "column",
                 flex: 1,
                 // backgroundColor: "red",
             }}>
+                {/* Prop Drilling */}
                 <Menu valorDoFiltro={valorDoFiltro} setValorDoFiltro={setValorDoFiltro} />
                 <Header />
                 <Timeline searchValue={valorDoFiltro} playlists={config.playlists} >
@@ -52,6 +52,9 @@ export default HomePage
 
 // criando um componente no lugar da div só que com style CSS 
 const StyledHeader = styled.div`
+
+
+    background-color: ${({ theme }) => theme.backgroundLevel1};
     img{
         width: 80px;
         height: 80px;
