@@ -1,24 +1,51 @@
 import React from "react";
 import config from "../config.json";
 import styled from "styled-components";
-
 import Menu from "../src/components/Menu";
 import { StyledTimeline } from "../src/components/Timeline";
+import { videoService } from "../src/services/videoService";
 
 
 
-function HomePage() {  
+function HomePage() {
+    const service = videoService();
     // console.log(config.playlists);
 
     const estilosDaHomePage = {
         //  backgroundColor: "red" 
     };
     const [valorDoFiltro, setValorDoFiltro] = React.useState("");
-    
+
+    // config.playlists
+    // const playlists =  {
+    //     "jogos": [],
+
+    // }
+
+    const [playlists, setPlaylists] = React.useState({});
+
+    React.useEffect(() => {
+        service
+        .getAllvideos()
+        .then((dados) => {
+            console.log(dados.data);
+            //Forma imutavel
+            const novasPlaylists = { ...playlists }
+            dados.data.forEach((video) => {
+                if (!novasPlaylists[video.playlist]) 
+                    novasPlaylists[video.playlist] = [];
+                
+                novasPlaylists[video.playlist].push(video);
+            })
+            setPlaylists(novasPlaylists);
+        });
+    }, []);
+
+    console.log("Playlist pront", playlists);
 
     return (
         <>
-            
+
             <div style={{
                 display: "flex",
                 flexDirection: "column",
@@ -99,7 +126,7 @@ function Header(propriedades) {
     )
 }
 
-function Timeline({searchValue, ...props}) {
+function Timeline({ searchValue, ...props }) {
     // console.log("Dentro do componente", props.playlists);
     const playlistNames = Object.keys(props.playlists)
     // for normal é statement
@@ -116,21 +143,21 @@ function Timeline({searchValue, ...props}) {
                         <h2>{playlistName}</h2>
                         <div>
                             {videos
-                            .filter((video) => {
-                                const titleNormalized = video.title.toLowerCase();
-                                const SearchValueNormalized = searchValue.toLowerCase();
-                                return titleNormalized.includes(SearchValueNormalized);
-                            })
-                            .map((video) => {
-                                return (
-                                    <a key={video.url} href={video.url}>
-                                        <img src={video.thumb} />
-                                        <span>
-                                            {video.title}
-                                        </span>
-                                    </a>
-                                )
-                            })}
+                                .filter((video) => {
+                                    const titleNormalized = video.title.toLowerCase();
+                                    const SearchValueNormalized = searchValue.toLowerCase();
+                                    return titleNormalized.includes(SearchValueNormalized);
+                                })
+                                .map((video) => {
+                                    return (
+                                        <a key={video.url} href={video.url}>
+                                            <img src={video.thumb} />
+                                            <span>
+                                                {video.title}
+                                            </span>
+                                        </a>
+                                    )
+                                })}
                         </div>
                     </section>
                 )
